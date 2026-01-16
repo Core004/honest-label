@@ -1,0 +1,25 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Backend
+backend/bin/
+backend/obj/
+backend/*.db
+backend/appsettings.Development.json
+
+# IDE
+.idea/
+.vscode/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.zip
+Local Client list/
+.claude/
