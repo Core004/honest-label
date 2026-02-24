@@ -7,6 +7,7 @@ import { publicApi } from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
 import OptimizedImage from '../components/OptimizedImage';
 import LoadingSpinner from '../components/LoadingSpinner';
+import SEO from '../components/SEO';
 
 // Animation variants - same as Products page
 const pageVariants = {
@@ -80,6 +81,11 @@ export default function Consumables() {
       animate="animate"
       className="min-h-screen bg-neutral-50"
     >
+      <SEO
+        title="Consumables"
+        description="Shop label printing consumables — thermal ribbons, label rolls, and printing supplies. Quality materials for consistent label output."
+        canonical="https://honestlabel.in/consumables"
+      />
       {/* Hero Section */}
       <section className="pt-16 pb-12 bg-white border-b border-neutral-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

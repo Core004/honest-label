@@ -3,6 +3,7 @@ import BlogCard from '../components/BlogCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
+import SEO from '../components/SEO';
 
 export default function Blog() {
   const { data: posts = [], isLoading: loading, isError: error } = useQuery({
@@ -12,6 +13,11 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
+      <SEO
+        title="Blog"
+        description="Read the latest articles, tips, and industry insights about label printing, packaging, and manufacturing from Honest Label."
+        canonical="https://honestlabel.in/blog"
+      />
       {/* Hero Section - Simple */}
       <section className="pt-16 pb-12 bg-white border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

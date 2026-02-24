@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { publicApi } from '../services/api';
 import ProductCard from '../components/ProductCard';
 import LoadingSpinner from '../components/LoadingSpinner';
+import SEO from '../components/SEO';
 
 // Animation variants
 const pageVariants = {
@@ -64,6 +65,11 @@ export default function Products() {
       animate="animate"
       className="min-h-screen bg-neutral-50"
     >
+      <SEO
+        title="Products"
+        description="Browse our full range of labels — barcodes, thermal rolls, stickers, and custom packaging labels. All manufactured in-house for quality and speed."
+        canonical="https://honestlabel.in/products"
+      />
       {/* Header */}
       <section className="pt-16 pb-12 bg-white border-b border-neutral-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

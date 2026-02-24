@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useAuth } from '../context/AuthContext';
+import SEO from '../components/SEO';
 
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -48,6 +49,7 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
+      <SEO title="Admin" noindex />
       {/* Sidebar */}
       <aside className="fixed inset-y-0 left-0 w-64 bg-neutral-900 text-white">
         <div className="flex items-center h-16 px-6 border-b border-neutral-800">

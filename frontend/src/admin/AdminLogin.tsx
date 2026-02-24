@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useAuth } from '../context/AuthContext';
+import SEO from '../components/SEO';
 
 
 export default function AdminLogin() {
@@ -35,6 +36,7 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen bg-neutral-900 flex items-center justify-center px-4">
+      <SEO title="Admin Login" noindex />
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <img src="/logo.svg" alt="Honest Label" className="h-12 w-auto mx-auto mb-4 brightness-0 invert" />

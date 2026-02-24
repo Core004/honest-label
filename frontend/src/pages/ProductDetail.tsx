@@ -5,6 +5,7 @@ import { publicApi } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { getImageUrl } from '../utils/imageUrl';
 import OptimizedImage from '../components/OptimizedImage';
+import SEO from '../components/SEO';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -52,6 +53,22 @@ export default function ProductDetail() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO
+        title={product.name}
+        description={product.shortDescription || product.description?.slice(0, 160) || `${product.name} — premium label by Honest Label.`}
+        canonical={`https://honestlabel.in/products/${slug}`}
+        ogType="product"
+        ogImage={product.imageUrl ? getImageUrl(product.imageUrl) : undefined}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          name: product.name,
+          description: product.shortDescription || product.description,
+          image: product.imageUrl ? getImageUrl(product.imageUrl) : undefined,
+          brand: { '@type': 'Brand', name: 'Honest Label' },
+          category: product.categoryName,
+        }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
         <nav className="mb-8">

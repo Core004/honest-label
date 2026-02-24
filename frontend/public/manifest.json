@@ -1,0 +1,21 @@
+{
+  "name": "Honest Label",
+  "short_name": "Honest Label",
+  "description": "Premium in-house label manufacturing — barcodes, thermal rolls, and custom packaging labels.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#171717",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

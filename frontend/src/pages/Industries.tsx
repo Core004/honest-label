@@ -6,6 +6,7 @@ import { publicApi } from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
 import OptimizedImage from '../components/OptimizedImage';
 import LoadingSpinner from '../components/LoadingSpinner';
+import SEO from '../components/SEO';
 
 // Animation variants
 const pageVariants = {
@@ -69,6 +70,11 @@ export default function Industries() {
       initial="initial"
       animate="animate"
     >
+      <SEO
+        title="Industries We Serve"
+        description="Honest Label provides labelling solutions for food, pharma, logistics, retail, and more. Discover how we serve your industry."
+        canonical="https://honestlabel.in/industries"
+      />
       {/* Hero Section */}
       <section className="relative pt-16 pb-12 sm:pt-24 sm:pb-16 overflow-hidden bg-gradient-to-b from-red-50/30 via-white to-neutral-50">
         <div className="absolute inset-0 -z-10">

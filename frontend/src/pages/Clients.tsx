@@ -2,6 +2,7 @@ import { LogoCloud } from '@/components/logo-cloud';
 import { CountUp } from '@/components/CountUp';
 import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { motion } from 'framer-motion';
+import SEO from '../components/SEO';
 
 // Page transition variants
 const pageVariants = {
@@ -46,6 +47,11 @@ export default function Clients() {
       initial="initial"
       animate="animate"
     >
+      <SEO
+        title="Our Clients"
+        description="Trusted by leading brands across India. See the companies that rely on Honest Label for premium label manufacturing."
+        canonical="https://honestlabel.in/clients"
+      />
       {/* Hero Section */}
       <section className="relative pt-20 pb-8 sm:pt-28 sm:pb-10 overflow-hidden bg-gradient-to-b from-red-50/30 via-white to-neutral-50">
         {/* Background Elements */}

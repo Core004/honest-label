@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 import ContactForm from '../components/ContactForm';
+import SEO from '../components/SEO';
 
 const contactInfo = [
   {
@@ -35,6 +36,11 @@ const openMaps = () => {
 export default function Contact() {
   return (
     <div className="min-h-screen bg-neutral-50">
+      <SEO
+        title="Contact Us"
+        description="Get in touch with Honest Label for custom label printing, quotes, and inquiries. Visit us in Ahmedabad or call +91-9512370018."
+        canonical="https://honestlabel.in/contact"
+      />
       {/* Hero Section - Simple */}
       <section className="pt-16 pb-12 bg-white border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

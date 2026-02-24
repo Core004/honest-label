@@ -5,6 +5,7 @@ import { publicApi } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { getImageUrl } from '../utils/imageUrl';
 import OptimizedImage from '../components/OptimizedImage';
+import SEO from '../components/SEO';
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
@@ -59,6 +60,27 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO
+        title={post.title}
+        description={post.excerpt || post.title}
+        canonical={`https://honestlabel.in/blog/${slug}`}
+        ogType="article"
+        ogImage={post.imageUrl ? getImageUrl(post.imageUrl) : undefined}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: post.title,
+          description: post.excerpt,
+          image: post.imageUrl ? getImageUrl(post.imageUrl) : undefined,
+          author: post.author ? { '@type': 'Person', name: post.author } : undefined,
+          datePublished: post.publishedAt,
+          publisher: {
+            '@type': 'Organization',
+            name: 'Honest Label',
+            logo: { '@type': 'ImageObject', url: 'https://honestlabel.in/favicon.png' },
+          },
+        }}
+      />
       <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Back Link */}
         <Link

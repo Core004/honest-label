@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import SEO from '../components/SEO';
 
 // Animation variants
 const fadeInUp = {
@@ -96,6 +97,11 @@ export default function About() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
+      <SEO
+        title="About Us"
+        description="Learn about Honest Label — Ahmedabad's trusted label manufacturer with in-house machinery for barcodes, thermal rolls, and custom packaging labels."
+        canonical="https://honestlabel.in/about"
+      />
       {/* Hero Section - Simple */}
       <section className="pt-16 pb-12 bg-white border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

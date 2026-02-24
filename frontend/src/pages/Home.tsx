@@ -10,6 +10,7 @@ import { FaqsSection } from '@/components/FaqsSection';
 import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { LabelAnimation } from '@/components/LabelAnimation';
 import { Sparkles } from '@/components/ui/sparkles';
+import SEO from '../components/SEO';
 
 // Animation variants
 const pageVariants = {
@@ -70,6 +71,41 @@ export default function Home() {
       initial="initial"
       animate="animate"
     >
+      <SEO
+        title="Premium In-House Label Manufacturing"
+        description="Honest Label manufactures premium barcodes, thermal rolls, and custom packaging labels in Ahmedabad. In-house machinery means better pricing and faster delivery."
+        canonical="https://honestlabel.in/"
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Honest Label',
+            url: 'https://honestlabel.in',
+            logo: 'https://honestlabel.in/favicon.png',
+            description: 'Premium in-house label manufacturing company based in Ahmedabad, Gujarat.',
+            contactPoint: {
+              '@type': 'ContactPoint',
+              telephone: '+91-9512370018',
+              contactType: 'sales',
+            },
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'LocalBusiness',
+            name: 'Honest Label',
+            url: 'https://honestlabel.in',
+            image: 'https://honestlabel.in/favicon.png',
+            telephone: '+91-9512370018',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Ahmedabad',
+              addressRegion: 'Gujarat',
+              addressCountry: 'IN',
+            },
+            priceRange: '$$',
+          },
+        ]}
+      />
       {/* Hero Section */}
       <div className="relative pt-16 pb-20 sm:pt-24 sm:pb-24 overflow-hidden">
         <div className="absolute inset-0 pattern-grid -z-10 h-full w-full"></div>
