@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://honestlabel.in/</loc>
+    <loc>https://honest-label-pied.vercel.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://honestlabel.in/about</loc>
+    <loc>https://honest-label-pied.vercel.app/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://honestlabel.in/products</loc>
+    <loc>https://honest-label-pied.vercel.app/products</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://honestlabel.in/industries</loc>
+    <loc>https://honest-label-pied.vercel.app/industries</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://honestlabel.in/consumables</loc>
+    <loc>https://honest-label-pied.vercel.app/consumables</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://honestlabel.in/clients</loc>
+    <loc>https://honest-label-pied.vercel.app/clients</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://honestlabel.in/blog</loc>
+    <loc>https://honest-label-pied.vercel.app/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://honestlabel.in/contact</loc>
+    <loc>https://honest-label-pied.vercel.app/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
