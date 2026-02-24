@@ -113,7 +113,7 @@ export default function Home() {
         {/* Sparkles Background */}
         <div className="absolute inset-0 -z-10 h-full w-full [mask-image:radial-gradient(50%_50%,white,transparent_85%)]">
           <Sparkles
-            density={1200}
+            density={400}
             className="absolute inset-0 h-full w-full"
             color="#000000"
             opacity={0.3}

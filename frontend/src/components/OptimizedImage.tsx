@@ -10,6 +10,12 @@ interface OptimizedImageProps {
   onError?: () => void;
   /** Fallback content when image fails to load */
   fallback?: React.ReactNode;
+  /** Responsive sizes attribute (e.g. "(max-width: 768px) 100vw, 50vw") */
+  sizes?: string;
+  /** Intrinsic width to prevent layout shift */
+  width?: number;
+  /** Intrinsic height to prevent layout shift */
+  height?: number;
 }
 
 export default function OptimizedImage({
@@ -19,6 +25,9 @@ export default function OptimizedImage({
   priority = false,
   onError,
   fallback,
+  sizes,
+  width,
+  height,
 }: OptimizedImageProps) {
   const [error, setError] = useState(false);
 
@@ -40,6 +49,9 @@ export default function OptimizedImage({
       fetchPriority={priority ? 'high' : undefined}
       onError={handleError}
       className={className}
+      sizes={sizes}
+      width={width}
+      height={height}
     />
   );
 }

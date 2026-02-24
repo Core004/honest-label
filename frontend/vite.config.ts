@@ -23,9 +23,10 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-motion': ['framer-motion', 'motion'],
+          'vendor-motion': ['framer-motion'],
           'vendor-query': ['@tanstack/react-query'],
           'vendor-ui': ['@radix-ui/react-accordion', '@iconify/react', 'lucide-react'],
+          'vendor-particles': ['@tsparticles/react', '@tsparticles/slim'],
         },
       },
     },
