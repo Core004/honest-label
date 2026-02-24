@@ -2,10 +2,11 @@
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "framework": null,
+  "cleanUrls": false,
+  "trailingSlash": false,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/[...path]?...path=$1" },
-    { "source": "/googlea50ba97ac87550fd.html", "destination": "/googlea50ba97ac87550fd.html" },
-    { "source": "/((?!api|uploads|robots\\.txt|sitemap\\.xml|manifest\\.json).*)", "destination": "/index.html" }
+    { "source": "/((?!api|uploads|robots\\.txt|sitemap\\.xml|manifest\\.json|google.*\\.html).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
