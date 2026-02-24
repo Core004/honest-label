@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import type { ProductList } from '../types';
 import { getImageUrl } from '../utils/imageUrl';
+import OptimizedImage from './OptimizedImage';
 
 interface ProductCardProps {
   product: ProductList;
@@ -24,13 +25,18 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link to={`/products/${product.slug}`}>
-      <div className="group relative rounded-2xl border overflow-hidden hover:shadow-xl transition-all duration-300 bg-white border-neutral-200 hover:shadow-neutral-200/50">
-        <div className="aspect-[4/3] p-6 flex items-center justify-center overflow-hidden border-b bg-neutral-50 border-neutral-100">
+      <div className="group relative rounded-2xl border overflow-hidden hover:shadow-xl transition-all duration-300 bg-white border-neutral-200 hover:shadow-neutral-200/50 h-full flex flex-col">
+        <div className="aspect-[4/3] overflow-hidden bg-neutral-100">
           {product.imageUrl ? (
-            <img
+            <OptimizedImage
               src={getImageUrl(product.imageUrl)}
               alt={product.name}
-              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              fallback={
+                <div className="w-full h-full flex items-center justify-center text-neutral-400">
+                  No Image
+                </div>
+              }
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-neutral-400">
@@ -38,7 +44,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
         </div>
-        <div className="p-6">
+        <div className="p-4 sm:p-6 flex flex-col flex-1">
           <div className="flex items-center justify-between mb-2">
             <span
               className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${colors.bg} ${colors.text} ${colors.ring}`}
@@ -47,7 +53,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
           <h3 className="text-lg font-semibold text-neutral-900">{product.name}</h3>
-          <p className="mt-2 text-sm text-neutral-500">{product.shortDescription}</p>
+          <p className="mt-2 text-sm text-neutral-500 line-clamp-2">{product.shortDescription}</p>
         </div>
       </div>
     </Link>

@@ -23,7 +23,7 @@ import type {
   PageSetting,
 } from '../types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -189,6 +189,13 @@ export const adminApi = {
     api.put(`/inquiries/${id}`, data),
   deleteInquiry: (id: number) => api.delete(`/inquiries/${id}`),
 
+  // Quote Requests
+  getQuoteRequests: (params?: { status?: number }) =>
+    api.get<QuoteRequest[]>('/quoterequests', { params }).then((res) => res.data),
+  updateQuoteRequest: (id: number, data: { status?: number; adminNotes?: string }) =>
+    api.put(`/quoterequests/${id}`, data),
+  deleteQuoteRequest: (id: number) => api.delete(`/quoterequests/${id}`),
+
   // Settings
   updateSettings: (settings: SiteSettings) => api.put('/settings', settings),
 
@@ -238,7 +245,7 @@ export const adminApi = {
   // Page Settings
   getAllPageSettings: () => api.get<PageSetting[]>('/pagesettings/all').then((res) => res.data),
   updatePageSetting: (id: number, data: Partial<PageSetting>) => api.put(`/pagesettings/${id}`, data),
-  togglePageSetting: (id: number) => api.put(`/pagesettings/${id}/toggle`),
+  togglePageSetting: (id: number) => api.put(`/pagesettings/toggle/${id}`),
 };
 
 export default api;

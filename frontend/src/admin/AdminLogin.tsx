@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useAuth } from '../context/AuthContext';
 
+
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,11 +37,7 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-neutral-900 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <img
-            src="https://honestlabel.in/wp-content/uploads/2024/12/Honest-LabelArtboard-1-copy-2@0.1x.png"
-            alt="Honest Label"
-            className="h-12 w-auto mx-auto mb-4"
-          />
+          <img src="/logo.svg" alt="Honest Label" className="h-12 w-auto mx-auto mb-4 brightness-0 invert" />
           <h1 className="text-2xl font-semibold text-white">Admin Login</h1>
           <p className="text-neutral-400 mt-2">Sign in to manage your website</p>
         </div>
@@ -55,16 +52,16 @@ export default function AdminLogin() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1">
-                Email Address
+                Username
               </label>
               <input
-                type="email"
+                type="text"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="block w-full rounded-lg border border-neutral-300 px-4 py-3 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-                placeholder="admin@honestlabel.in"
+                placeholder="Enter your username"
               />
             </div>
 
@@ -104,9 +101,6 @@ export default function AdminLogin() {
           </div>
         </div>
 
-        <p className="text-center text-neutral-500 text-xs mt-8">
-          Default credentials: admin@honestlabel.in / Admin@123
-        </p>
       </div>
     </div>
   );

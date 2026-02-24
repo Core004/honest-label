@@ -1,31 +1,25 @@
-import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { publicApi } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { getImageUrl } from '../utils/imageUrl';
-import type { Product } from '../types';
+import OptimizedImage from '../components/OptimizedImage';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      if (!slug) return;
-      try {
-        const data = await publicApi.getProduct(slug);
-        setProduct(data);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProduct();
-  }, [slug]);
+  const { data: product, isLoading: loading, isError: error } = useQuery({
+    queryKey: ['product', slug],
+    queryFn: () => publicApi.getProduct(slug!),
+    enabled: !!slug,
+    // Seed from cached products list for instant render
+    initialData: () => {
+      const products = queryClient.getQueryData<any[]>(['products', {}]);
+      return products?.find((p) => p.slug === slug);
+    },
+  });
 
   if (loading) {
     return (
@@ -85,12 +79,18 @@ export default function ProductDetail() {
         <div className="lg:grid lg:grid-cols-2 lg:gap-16">
           {/* Product Image */}
           <div className="mb-8 lg:mb-0">
-            <div className="aspect-square rounded-2xl bg-neutral-50 border border-neutral-200 p-8 flex items-center justify-center">
+            <div className="aspect-square rounded-xl sm:rounded-2xl bg-neutral-50 border border-neutral-200 p-4 sm:p-8 flex items-center justify-center relative">
               {product.imageUrl ? (
-                <img
+                <OptimizedImage
                   src={getImageUrl(product.imageUrl)}
                   alt={product.name}
                   className="w-full h-full object-contain"
+                  priority
+                  fallback={
+                    <div className="text-neutral-400">
+                      <Icon icon="lucide:image-off" width={64} />
+                    </div>
+                  }
                 />
               ) : (
                 <div className="text-neutral-400">
@@ -102,16 +102,15 @@ export default function ProductDetail() {
 
           {/* Product Info */}
           <div>
-            <div className="mb-4">
-              <Link
-                to={`/products?category=${product.categorySlug}`}
-                className="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-700"
-              >
-                {product.categoryName}
-              </Link>
-            </div>
+            {product.categoryName && (
+              <div className="mb-4">
+                <span className="inline-flex items-center text-sm text-indigo-600">
+                  {product.categoryName}
+                </span>
+              </div>
+            )}
 
-            <h1 className="text-3xl font-semibold text-neutral-900 mb-4">{product.name}</h1>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-neutral-900 mb-4">{product.name}</h1>
 
             {product.shortDescription && (
               <p className="text-lg text-neutral-500 mb-6">{product.shortDescription}</p>

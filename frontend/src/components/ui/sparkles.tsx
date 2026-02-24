@@ -1,6 +1,4 @@
 import { useEffect, useId, useState } from "react"
-import Particles, { initParticlesEngine } from "@tsparticles/react"
-import { loadSlim } from "@tsparticles/slim"
 
 export function Sparkles({
   className,
@@ -30,13 +28,25 @@ export function Sparkles({
   options?: any
 }) {
   const [isReady, setIsReady] = useState(false)
+  const [ParticlesComponent, setParticlesComponent] = useState<any>(null)
 
   useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine)
-    }).then(() => {
-      setIsReady(true)
-    })
+    let cancelled = false
+    async function loadParticles() {
+      const [{ default: Particles, initParticlesEngine }, { loadSlim }] = await Promise.all([
+        import("@tsparticles/react"),
+        import("@tsparticles/slim"),
+      ])
+      await initParticlesEngine(async (engine) => {
+        await loadSlim(engine)
+      })
+      if (!cancelled) {
+        setParticlesComponent(() => Particles)
+        setIsReady(true)
+      }
+    }
+    loadParticles()
+    return () => { cancelled = true }
   }, [])
 
   const id = useId()
@@ -89,6 +99,7 @@ export function Sparkles({
     detectRetina: true,
   }
 
-  return isReady ? <Particles id={id} options={{ ...defaultOptions, ...options }} className={className} /> : null
-}
+  if (!isReady || !ParticlesComponent) return null
 
+  return <ParticlesComponent id={id} options={{ ...defaultOptions, ...options }} className={className} />
+}

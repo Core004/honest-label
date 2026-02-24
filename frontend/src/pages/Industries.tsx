@@ -1,23 +1,11 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+import { publicApi } from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
+import OptimizedImage from '../components/OptimizedImage';
 import LoadingSpinner from '../components/LoadingSpinner';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5237/api';
-
-interface Industry {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
-  imageUrl: string;
-  icon: string;
-  features: string;
-  isActive: boolean;
-  displayOrder: number;
-}
 
 // Animation variants
 const pageVariants = {
@@ -57,21 +45,10 @@ const cardVariants = {
 };
 
 export default function Industries() {
-  const [industries, setIndustries] = useState<Industry[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(`${API_URL}/industries`)
-      .then(res => res.json())
-      .then(data => {
-        setIndustries(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to fetch industries:', err);
-        setLoading(false);
-      });
-  }, []);
+  const { data: industries = [], isLoading: loading } = useQuery({
+    queryKey: ['industries'],
+    queryFn: publicApi.getIndustries,
+  });
 
   const parseFeatures = (features: string): string[] => {
     if (!features) return [];
@@ -162,7 +139,7 @@ export default function Industries() {
       <section className="py-16 bg-neutral-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-50px" }}
@@ -184,11 +161,22 @@ export default function Industries() {
               >
                 {/* Image - Fixed Height */}
                 <div className="relative h-44 overflow-hidden flex-shrink-0">
-                  <img
-                    src={getImageUrl(industry.imageUrl)}
-                    alt={industry.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  {industry.imageUrl ? (
+                    <OptimizedImage
+                      src={getImageUrl(industry.imageUrl)}
+                      alt={industry.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      fallback={
+                        <div className="w-full h-full bg-gradient-to-br from-neutral-800 to-neutral-900 flex items-center justify-center">
+                          <Icon icon={industry.icon || 'lucide:tag'} className="text-neutral-600 group-hover:text-neutral-500 transition-colors" width={48} />
+                        </div>
+                      }
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-neutral-800 to-neutral-900 flex items-center justify-center">
+                      <Icon icon={industry.icon || 'lucide:tag'} className="text-neutral-600 group-hover:text-neutral-500 transition-colors" width={48} />
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/70 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="flex items-center gap-2 text-white">

@@ -2,9 +2,12 @@ import { Outlet } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 import Navbar from './Navbar';
-import { Footer } from './footer';
+import { Footer } from './Footer';
+import { usePrefetchData } from '../hooks/usePrefetchData';
 
 export default function Layout() {
+  // Prefetch all common data on first load so pages render instantly
+  usePrefetchData();
   return (
     <div className="min-h-screen flex flex-col antialiased selection:bg-slate-900 selection:text-white text-slate-600">
       <Navbar />
@@ -25,7 +28,7 @@ export default function Layout() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Icon icon="ri:whatsapp-fill" width={24} />
+        <Icon icon="fa6-brands:whatsapp" width={24} />
         <span className="font-medium text-sm hidden sm:inline">Chat with us</span>
       </motion.a>
     </div>

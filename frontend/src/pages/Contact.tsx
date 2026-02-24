@@ -111,7 +111,7 @@ export default function Contact() {
                   className="flex items-center gap-3 w-full p-4 rounded-lg bg-green-600 hover:bg-green-500 transition-all mb-4 group"
                 >
                   <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Icon icon="ri:whatsapp-fill" width={22} />
+                    <Icon icon="fa6-brands:whatsapp" width={22} />
                   </div>
                   <div className="flex-1">
                     <div className="font-medium">Chat on WhatsApp</div>
@@ -143,7 +143,7 @@ export default function Contact() {
                     { icon: 'lucide:instagram', href: '#', label: 'Instagram' },
                     { icon: 'lucide:linkedin', href: '#', label: 'LinkedIn' },
                     { icon: 'lucide:facebook', href: '#', label: 'Facebook' },
-                    { icon: 'ri:whatsapp-fill', href: 'https://wa.me/919512370018', label: 'WhatsApp' },
+                    { icon: 'fa6-brands:whatsapp', href: 'https://wa.me/919512370018', label: 'WhatsApp' },
                   ].map((social, idx) => (
                     <motion.a
                       key={idx}

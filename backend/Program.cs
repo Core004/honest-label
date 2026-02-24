@@ -43,6 +43,10 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             "http://localhost:5173",
+            "http://localhost:5174",
+            "http://localhost:5175",
+            "http://localhost:5176",
+            "http://localhost:5177",
             "http://localhost:3000",
             "http://172.31.69.101:5173",
             "https://honestlabel.in"
@@ -90,15 +94,30 @@ using (var scope = app.Services.CreateScope())
     {
         var adminUser = new HonestLabel.API.Models.AdminUser
         {
-            Email = "admin@honestlabel.in",
+            Email = "admin",
             Name = "Admin",
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123", 11),
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin", 11),
             Role = "SuperAdmin",
             CreatedAt = DateTime.UtcNow
         };
         db.AdminUsers.Add(adminUser);
         db.SaveChanges();
     }
+
+    // Update existing admin email to 'admin'
+    var existingAdmin = db.AdminUsers.FirstOrDefault(u => u.Email == "admin@honestlabel.in");
+    if (existingAdmin != null)
+    {
+        existingAdmin.Email = "admin";
+        db.SaveChanges();
+    }
+
+    // Add Features column to Industries if not exists
+    try
+    {
+        db.Database.ExecuteSqlRaw("ALTER TABLE Industries ADD COLUMN Features TEXT");
+    }
+    catch { /* Column already exists */ }
 
     // Create PageSettings table if not exists and seed data
     try

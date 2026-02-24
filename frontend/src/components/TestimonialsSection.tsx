@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5237/api';
+import { useQuery } from '@tanstack/react-query';
+import { publicApi } from '../services/api';
 
 interface Testimonial {
   id: number;
@@ -16,15 +16,13 @@ interface Testimonial {
 }
 
 export function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const { data: allTestimonials = [] } = useQuery({
+    queryKey: ['testimonials'],
+    queryFn: publicApi.getTestimonials,
+  });
 
-  useEffect(() => {
-    fetch(`${API_URL}/testimonials`)
-      .then(res => res.json())
-      .then(data => setTestimonials(data.filter((t: Testimonial) => t.isActive)))
-      .catch(err => console.error('Failed to fetch testimonials:', err));
-  }, []);
+  const testimonials = allTestimonials.filter((t: Testimonial) => t.isActive);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     if (testimonials.length <= 1) return;

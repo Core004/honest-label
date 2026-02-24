@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import { useQuery } from '@tanstack/react-query';
 import { publicApi } from '../services/api';
+
 import type { PageSetting } from '../types';
 
 const defaultNavLinks = [
+  { href: '/', label: 'Home' },
   { href: '/products', label: 'Products' },
   { href: '/consumables', label: 'Consumables' },
   { href: '/industries', label: 'Industries' },
@@ -16,54 +19,42 @@ const defaultNavLinks = [
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [navLinks, setNavLinks] = useState(defaultNavLinks);
-  const [showGetQuote, setShowGetQuote] = useState(true);
   const location = useLocation();
 
-  useEffect(() => {
-    const fetchPageSettings = async () => {
-      try {
-        const pages = await publicApi.getPageSettings();
+  const { data: pages } = useQuery({
+    queryKey: ['pageSettings'],
+    queryFn: publicApi.getPageSettings,
+  });
 
-        // Filter and map to nav links based on page settings
-        const publishedPages = pages.filter((p: PageSetting) => p.isPublished && p.showInNavbar);
+  // Derive nav links from page settings (or use defaults)
+  let navLinks = defaultNavLinks;
+  let showGetQuote = true;
 
-        // Create nav links from page settings
-        const dynamicLinks = publishedPages
-          .filter((p: PageSetting) => p.pageSlug !== 'get-quote') // Handle get-quote separately
-          .sort((a: PageSetting, b: PageSetting) => a.displayOrder - b.displayOrder)
-          .map((p: PageSetting) => ({
-            href: `/${p.pageSlug}`,
-            label: p.pageName
-          }));
+  if (pages && pages.length > 0) {
+    const publishedPages = pages.filter((p: PageSetting) => p.isPublished && p.showInNavbar);
+    const dynamicLinks = publishedPages
+      .filter((p: PageSetting) => p.pageSlug !== 'get-quote')
+      .sort((a: PageSetting, b: PageSetting) => a.displayOrder - b.displayOrder)
+      .map((p: PageSetting) => ({
+        href: `/${p.pageSlug}`,
+        label: p.pageName
+      }));
 
-        if (dynamicLinks.length > 0) {
-          setNavLinks(dynamicLinks);
-        }
+    if (dynamicLinks.length > 0) {
+      navLinks = [{ href: '/', label: 'Home' }, ...dynamicLinks];
+    }
 
-        // Check if get-quote is published
-        const getQuotePage = pages.find((p: PageSetting) => p.pageSlug === 'get-quote');
-        setShowGetQuote(!getQuotePage || (getQuotePage.isPublished && getQuotePage.showInNavbar));
-      } catch (error) {
-        console.error('Failed to fetch page settings:', error);
-        // Keep default nav links on error
-      }
-    };
-
-    fetchPageSettings();
-  }, []);
+    const getQuotePage = pages.find((p: PageSetting) => p.pageSlug === 'get-quote');
+    showGetQuote = !getQuotePage || (getQuotePage.isPublished && getQuotePage.showInNavbar);
+  }
 
   return (
     <nav className="fixed top-0 w-full z-50 glass-panel">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex-shrink-0 flex items-center">
-            <img
-              src="https://honestlabel.in/wp-content/uploads/2024/12/Honest-LabelArtboard-1-copy-2@0.1x.png"
-              alt="Honest Label"
-              className="h-12 w-auto object-contain"
-            />
+          <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex-shrink-0 flex items-center">
+            <img src="/logo.svg" alt="Honest Label" className="h-10 w-auto" />
           </Link>
 
           {/* Desktop Menu */}
@@ -72,6 +63,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
+                onClick={link.href === '/' ? () => window.scrollTo({ top: 0, behavior: 'smooth' }) : undefined}
                 className={`text-sm font-medium transition-colors ${
                   location.pathname === link.href
                     ? 'text-neutral-900'
@@ -110,8 +102,8 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   to={link.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`text-sm font-medium px-2 py-2 transition-colors ${
+                  onClick={() => { setIsMenuOpen(false); if (link.href === '/') window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className={`text-sm font-medium px-3 py-3 rounded-lg transition-colors ${
                     location.pathname === link.href
                       ? 'text-neutral-900'
                       : 'text-neutral-500 hover:text-neutral-900'

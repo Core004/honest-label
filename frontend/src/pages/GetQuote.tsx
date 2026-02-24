@@ -306,7 +306,7 @@ export default function GetQuote() {
 
                 <div className="mb-6">
                   <label className="block text-sm font-medium mb-3 text-neutral-700">Material Type</label>
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3">
                     {materials.map((mat) => (
                       <label key={mat} className="cursor-pointer">
                         <input
@@ -327,7 +327,7 @@ export default function GetQuote() {
 
                 <div>
                   <label className="block text-sm font-medium mb-3 text-neutral-700">Print Type</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3">
                     {printTypes.map((print) => (
                       <label key={print} className="cursor-pointer">
                         <input
@@ -385,7 +385,7 @@ export default function GetQuote() {
               </button>
 
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-6 pt-4 border-t border-neutral-100">
+              <div className="flex items-center justify-center gap-4 sm:gap-6 pt-4 border-t border-neutral-100 flex-wrap">
                 <div className="flex items-center gap-2 text-xs text-neutral-500">
                   <Icon icon="lucide:shield-check" className="text-green-500" width={14} />
                   <span>Secure</span>

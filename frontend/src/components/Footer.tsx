@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Sparkles } from "@/components/ui/sparkles";
+
 import type React from "react";
 import type { ComponentProps, ReactNode } from "react";
 
@@ -92,19 +93,18 @@ export function Footer() {
 			
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
 				{/* Top Section - Logo and Links */}
-				<div className="flex flex-col lg:flex-row lg:justify-between gap-10">
+				<div className="flex flex-col lg:flex-row lg:justify-between gap-8 lg:gap-10">
 					{/* Brand Section */}
 					<AnimatedContainer className="lg:max-w-xs">
 						<Link to="/" className="inline-block mb-4">
-							<img
-								src="https://honestlabel.in/wp-content/uploads/2024/12/Honest-LabelArtboard-1-copy-2@0.1x.png"
-								alt="Honest Label"
-								className="h-8 w-auto object-contain"
-							/>
+							<img src="/logo.svg" alt="Honest Label" className="h-8 w-auto" />
 						</Link>
-						<p className="text-neutral-500 text-sm leading-relaxed">
-							Premium labeling solutions manufacturer based in Ahmedabad.
-						</p>
+						<div className="text-neutral-500 text-sm leading-relaxed space-y-1">
+							<p>170/171, HonestIT - Corporate House</p>
+							<p>Besides Sanskruti Building,</p>
+							<p>Near Old High-Court, Ashram Rd</p>
+							<p>Ahmedabad, Gujarat 380009</p>
+						</div>
 					</AnimatedContainer>
 
 					{/* Links Grid */}
@@ -152,7 +152,7 @@ export function Footer() {
 
 				{/* Contact Row */}
 				<AnimatedContainer delay={0.3}>
-					<div className="mt-10 pt-8 border-t border-neutral-200 flex flex-wrap justify-center gap-6 text-sm text-neutral-500">
+					<div className="mt-10 pt-8 border-t border-neutral-200 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-6 text-sm text-neutral-500">
 						<a href="tel:+919512370018" className="flex items-center gap-1.5 hover:text-neutral-900 transition-colors">
 							<PhoneIcon className="size-4" />
 							+91 95123 70018
@@ -170,12 +170,9 @@ export function Footer() {
 
 				{/* Copyright */}
 				<AnimatedContainer delay={0.4}>
-					<div className="mt-6 text-center space-y-1">
+					<div className="mt-6 text-center">
 						<p className="text-neutral-400 text-xs">
 							&copy; {new Date().getFullYear()} Honest Label. All rights reserved.
-						</p>
-						<p className="text-neutral-400 text-xs">
-							Designed by <a href="https://verinadigitalstudio.com" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-neutral-700 transition-colors">Verina Digital Studio</a>
 						</p>
 					</div>
 				</AnimatedContainer>

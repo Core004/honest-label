@@ -1,33 +1,16 @@
-import { useEffect, useState } from "react";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
 import { motion } from "framer-motion";
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5237/api';
-const getImageUrl = (url?: string) => {
-  if (!url) return '';
-  if (url.startsWith('http')) return url;
-  return `${API_URL.replace('/api', '')}${url}`;
-};
-
-interface ClientLogo {
-  id: number;
-  name: string;
-  imageUrl: string;
-  website?: string;
-  isActive: boolean;
-  displayOrder: number;
-}
+import { useQuery } from "@tanstack/react-query";
+import { publicApi } from "../services/api";
+import { getImageUrl } from "../utils/imageUrl";
+import OptimizedImage from "./OptimizedImage";
 
 // Infinite slider version for home page
 export function LogoCloudSlider() {
-	const [logos, setLogos] = useState<ClientLogo[]>([]);
-
-	useEffect(() => {
-		fetch(`${API_URL}/clientlogos`)
-			.then(res => res.json())
-			.then(data => setLogos(data))
-			.catch(err => console.error('Failed to fetch logos:', err));
-	}, []);
+	const { data: logos = [] } = useQuery({
+		queryKey: ['clientLogos'],
+		queryFn: publicApi.getClientLogos,
+	});
 
 	if (logos.length === 0) return null;
 
@@ -37,14 +20,11 @@ export function LogoCloudSlider() {
 				{logos.map((logo) => {
 					const needsInvert = logo.name.toLowerCase().includes('itcs') || logo.name.toLowerCase().includes('solco');
 					return (
-						<img
+						<OptimizedImage
 							alt={logo.name}
 							className={`pointer-events-none h-10 select-none md:h-12 object-contain ${needsInvert ? 'invert' : ''}`}
-							height="auto"
 							key={`slider-logo-${logo.id}`}
-							loading="lazy"
 							src={getImageUrl(logo.imageUrl)}
-							width="auto"
 						/>
 					);
 				})}
@@ -86,21 +66,10 @@ const cardVariants = {
 
 // Grid version for clients page with animations
 export function LogoCloud() {
-	const [logos, setLogos] = useState<ClientLogo[]>([]);
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		fetch(`${API_URL}/clientlogos`)
-			.then(res => res.json())
-			.then(data => {
-				setLogos(data);
-				setLoading(false);
-			})
-			.catch(err => {
-				console.error('Failed to fetch logos:', err);
-				setLoading(false);
-			});
-	}, []);
+	const { data: logos = [], isLoading: loading } = useQuery({
+		queryKey: ['clientLogos'],
+		queryFn: publicApi.getClientLogos,
+	});
 
 	if (loading) {
 		return (
@@ -119,41 +88,21 @@ export function LogoCloud() {
 	}
 
 	return (
-		<motion.div
-			className="grid grid-cols-2 rounded-lg bg-border shadow sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-			variants={containerVariants}
-			initial="hidden"
-			animate="visible"
-		>
+		<div className="grid grid-cols-2 rounded-lg bg-border shadow sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
 			{logos.map((logo) => {
 				const needsInvert = logo.name.toLowerCase().includes('itcs') || logo.name.toLowerCase().includes('solco');
 				return (
-				<motion.div
+				<div
 					className="flex items-center justify-center rounded-lg border bg-background p-6 md:p-8 overflow-hidden"
 					key={`grid-logo-${logo.id}`}
-					variants={cardVariants}
-					whileHover={{
-						scale: 1.05,
-						backgroundColor: "rgba(249, 250, 251, 1)",
-						boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.1)",
-						transition: { duration: 0.3, ease: "easeOut" },
-					}}
-					whileTap={{ scale: 0.98 }}
 				>
-					<motion.img
+					<OptimizedImage
 						alt={logo.name}
-						className={`pointer-events-none block h-8 select-none md:h-10 object-contain ${needsInvert ? 'invert' : ''}`}
-						height="auto"
-						loading="lazy"
+						className={`pointer-events-none block h-10 select-none md:h-14 object-contain ${needsInvert ? 'invert' : ''}`}
 						src={getImageUrl(logo.imageUrl)}
-						width="auto"
-						whileHover={{
-							scale: 1.1,
-							transition: { duration: 0.3, ease: "easeOut" },
-						}}
 					/>
-				</motion.div>
+				</div>
 			);})}
-		</motion.div>
+		</div>
 	);
 }

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useAuth } from '../context/AuthContext';
+
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const navItems = [
@@ -17,6 +18,7 @@ const navItems = [
   { href: '/admin/testimonials', label: 'Testimonials', icon: 'lucide:message-square' },
   { href: '/admin/home-content', label: 'Home Content', icon: 'lucide:home' },
   { href: '/admin/inquiries', label: 'Inquiries', icon: 'lucide:mail' },
+  { href: '/admin/quote-requests', label: 'Quote Requests', icon: 'lucide:file-text' },
   { href: '/admin/pages', label: 'Page Settings', icon: 'lucide:file-cog' },
   { href: '/admin/settings', label: 'Settings', icon: 'lucide:settings' },
 ];
@@ -49,11 +51,7 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <aside className="fixed inset-y-0 left-0 w-64 bg-neutral-900 text-white">
         <div className="flex items-center h-16 px-6 border-b border-neutral-800">
-          <img
-            src="https://honestlabel.in/wp-content/uploads/2024/12/Honest-LabelArtboard-1-copy-2@0.1x.png"
-            alt="Honest Label"
-            className="h-8 w-auto invert"
-          />
+          <img src="/logo.svg" alt="Honest Label" className="h-8 w-auto brightness-0 invert" />
         </div>
 
         <nav className="p-4 space-y-1">

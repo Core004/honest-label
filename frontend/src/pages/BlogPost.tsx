@@ -1,31 +1,25 @@
-import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { publicApi } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { getImageUrl } from '../utils/imageUrl';
-import type { BlogPost as BlogPostType } from '../types';
+import OptimizedImage from '../components/OptimizedImage';
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPostType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      if (!slug) return;
-      try {
-        const data = await publicApi.getBlogPost(slug);
-        setPost(data);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPost();
-  }, [slug]);
+  const { data: post, isLoading: loading, isError: error } = useQuery({
+    queryKey: ['blogPost', slug],
+    queryFn: () => publicApi.getBlogPost(slug!),
+    enabled: !!slug,
+    // Seed from cached blog posts list for instant render
+    initialData: () => {
+      const posts = queryClient.getQueryData<any[]>(['blogPosts']);
+      return posts?.find((p) => p.slug === slug);
+    },
+  });
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
@@ -77,7 +71,7 @@ export default function BlogPost() {
 
         {/* Post Header */}
         <header className="mb-8">
-          <h1 className="text-4xl font-semibold tracking-tight text-neutral-900 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-neutral-900 mb-4">
             {post.title}
           </h1>
           <div className="flex items-center gap-4 text-sm text-neutral-500">
@@ -98,8 +92,8 @@ export default function BlogPost() {
 
         {/* Featured Image */}
         {post.imageUrl && (
-          <div className="mb-8 rounded-2xl overflow-hidden">
-            <img src={getImageUrl(post.imageUrl)} alt={post.title} className="w-full h-auto" />
+          <div className="mb-8 rounded-2xl overflow-hidden relative">
+            <OptimizedImage src={getImageUrl(post.imageUrl)} alt={post.title} priority className="w-full h-auto" />
           </div>
         )}
 

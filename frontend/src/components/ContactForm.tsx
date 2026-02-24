@@ -95,7 +95,7 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="rounded-xl border p-8 bg-white border-neutral-200 shadow-sm">
+    <div className="rounded-xl border p-4 sm:p-6 md:p-8 bg-white border-neutral-200 shadow-sm">
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-neutral-900">Request a Quote</h2>
         <p className="text-sm text-neutral-500 mt-1">Fill out the form and we'll get back to you within 24 hours</p>
@@ -206,7 +206,7 @@ export default function ContactForm() {
 
         <div>
           <label className="block text-sm font-medium mb-3 text-neutral-700">Label Type Required</label>
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3">
             {labelTypes.map((type) => (
               <label key={type} className="cursor-pointer">
                 <input
@@ -263,7 +263,7 @@ export default function ContactForm() {
         </button>
 
         {/* Trust Indicators */}
-        <div className="flex items-center justify-center gap-6 pt-4 border-t border-neutral-100">
+        <div className="flex items-center justify-center gap-4 sm:gap-6 pt-4 border-t border-neutral-100 flex-wrap">
           <div className="flex items-center gap-2 text-xs text-neutral-500">
             <Icon icon="lucide:shield-check" className="text-green-500" width={14} />
             <span>Secure</span>

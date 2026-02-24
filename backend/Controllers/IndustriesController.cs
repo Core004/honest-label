@@ -68,6 +68,7 @@ public class IndustriesController : ControllerBase
         industry.Description = dto.Description;
         industry.ImageUrl = dto.ImageUrl;
         industry.Icon = dto.Icon;
+        industry.Features = dto.Features;
         industry.IsActive = dto.IsActive;
         industry.DisplayOrder = dto.DisplayOrder;
         industry.UpdatedAt = DateTime.UtcNow;

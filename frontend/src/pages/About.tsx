@@ -74,28 +74,18 @@ const features = [
       '100% quality inspection on every batch. We never compromise on the quality of our products.',
   },
   {
-    icon: 'lucide:leaf',
-    title: 'Eco-Friendly Options',
+    icon: 'lucide:sparkles',
+    title: 'Cosmetic & Beauty Labels',
     description:
-      'Biodegradable and recyclable labeling solutions for environmentally conscious businesses.',
+      'Premium waterproof and oil-resistant labels designed for cosmetic, skincare, and beauty products.',
   },
 ];
 
 const team = [
   {
-    name: 'Paresh',
-    role: 'CEO',
-    description: 'Leading the vision and strategic direction of Honest Label.',
-  },
-  {
     name: 'Hardik',
     role: 'CEO',
     description: 'Overseeing operations and ensuring excellence in manufacturing.',
-  },
-  {
-    name: 'Jekil',
-    role: 'CEO',
-    description: 'Driving business growth and client relationships.',
   },
 ];
 
@@ -110,7 +100,7 @@ export default function About() {
       <section className="pt-16 pb-12 bg-white border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <h1 className="text-4xl font-semibold tracking-tight text-neutral-900 mb-4">
+            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900 mb-4">
               About Honest Label
             </h1>
             <p className="text-lg text-neutral-500">
@@ -157,14 +147,14 @@ export default function About() {
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
                 <p>
-                  Founded in 2020, we are a dedicated Label Manufacturing Company committed to
+                  Founded in 2022, we are a dedicated Label Manufacturing Company committed to
                   delivering high-quality, precision-crafted labeling solutions for diverse industries.
                   From product identification to branding and compliance, our labels are designed to
                   meet the highest standards of durability, accuracy, and visual appeal.
                 </p>
                 <p>
-                  With a strong vision and strategic leadership from our CEOs — Paresh, Hardik, and
-                  Jekil — we have steadily grown into a trusted partner for businesses seeking
+                  With a strong vision and strategic leadership, we have steadily grown into a
+                  trusted partner for businesses seeking
                   reliability, innovation, and timely delivery. Our state-of-the-art manufacturing
                   capabilities and customer-centric approach enable us to produce labels tailored to
                   unique requirements across sectors such as retail, automotive, healthcare, logistics,
@@ -195,7 +185,7 @@ export default function About() {
                   {[
                     { value: "500+", label: "Happy Clients" },
                     { value: "10M+", label: "Labels Delivered" },
-                    { value: "5+", label: "Years Experience" },
+                    { value: "4+", label: "Years Experience" },
                     { value: "50+", label: "Industries Served" },
                   ].map((stat, index) => (
                     <motion.div
@@ -208,7 +198,7 @@ export default function About() {
                         transition: { duration: 0.3 },
                       }}
                     >
-                      <div className="text-3xl font-bold text-neutral-900">{stat.value}</div>
+                      <div className="text-2xl sm:text-3xl font-bold text-neutral-900">{stat.value}</div>
                       <div className="text-sm text-neutral-500 mt-1">{stat.label}</div>
                     </motion.div>
                   ))}
@@ -238,7 +228,7 @@ export default function About() {
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-50px" }}
@@ -292,7 +282,7 @@ export default function About() {
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
+            className="grid grid-cols-1 gap-8 max-w-sm mx-auto"
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-50px" }}

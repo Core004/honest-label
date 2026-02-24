@@ -1,133 +1,69 @@
-import { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useQuery } from '@tanstack/react-query';
+import { publicApi } from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
+import OptimizedImage from '../components/OptimizedImage';
 import LoadingSpinner from '../components/LoadingSpinner';
 
-gsap.registerPlugin(ScrollTrigger);
+// Animation variants - same as Products page
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      staggerChildren: 0.1,
+    },
+  },
+};
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5237/api';
+const heroVariants = {
+  initial: { opacity: 0, y: 30 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+};
 
-interface Consumable {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
-  imageUrl: string;
-  icon: string;
-  features: string;
-  isActive: boolean;
-  displayOrder: number;
-}
-
-// Category definitions based on icon
-const consumableCategories = [
-  {
-    id: 'thermal-ribbons',
-    icon: 'lucide:scroll',
-    name: 'Thermal Transfer Ribbons',
-    description: 'High-quality ribbons for thermal transfer printing',
+const cardVariants = {
+  initial: { opacity: 0, y: 40, scale: 0.95 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
   },
-  {
-    id: 'labels',
-    icon: 'lucide:tag',
-    name: 'Labels & Tags',
-    description: 'Direct thermal and thermal transfer labels',
-  },
-  {
-    id: 'print-heads',
-    icon: 'lucide:cpu',
-    name: 'Print Heads',
-    description: 'Replacement print heads for major brands',
-  },
-  {
-    id: 'cleaning',
-    icon: 'lucide:sparkles',
-    name: 'Cleaning Supplies',
-    description: 'Maintenance kits and cleaning accessories',
-  },
-];
+};
 
 export default function Consumables() {
-  const [consumables, setConsumables] = useState<Consumable[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const { data: consumables = [], isLoading: loading } = useQuery({
+    queryKey: ['consumables'],
+    queryFn: publicApi.getConsumables,
+  });
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Refs for GSAP
-  const containerRef = useRef<HTMLDivElement>(null);
-  const productsGridRef = useRef<HTMLDivElement>(null);
-  const productCardsRef = useRef<HTMLDivElement[]>([]);
-
-  useEffect(() => {
-    fetch(`${API_URL}/consumables`)
-      .then(res => res.json())
-      .then(data => {
-        setConsumables(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to fetch consumables:', err);
-        setLoading(false);
-      });
-  }, []);
-
-  const getCategoryByIcon = (icon: string) => {
-    return consumableCategories.find(c => c.icon === icon);
-  };
 
   const parseFeatures = (features: string): string[] => {
     if (!features) return [];
     return features.split(',').map(f => f.trim()).filter(Boolean);
   };
 
-  // Filter consumables
   const filteredConsumables = consumables.filter((item) => {
-    const category = getCategoryByIcon(item.icon);
-    const matchesCategory = !selectedCategory || category?.id === selectedCategory;
-    const matchesSearch =
-      !searchQuery ||
+    if (!searchQuery) return true;
+    return (
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+      item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   });
-
-  // GSAP animations
-  useLayoutEffect(() => {
-    if (loading || filteredConsumables.length === 0) return;
-
-    const ctx = gsap.context(() => {
-      const cards = productCardsRef.current.filter(Boolean);
-      if (cards.length > 0) {
-        gsap.fromTo(
-          cards,
-          { opacity: 0, y: 60, scale: 0.95 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.6,
-            stagger: { amount: 0.4, from: 'start' },
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: productsGridRef.current,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, [loading, filteredConsumables.length, selectedCategory]);
-
-  useEffect(() => {
-    productCardsRef.current = [];
-  }, [filteredConsumables.length]);
 
   if (loading) {
     return (
@@ -138,235 +74,154 @@ export default function Consumables() {
   }
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-neutral-50">
-      {/* Hero Section - Simple */}
-      <section className="pt-16 pb-12 bg-white border-b border-neutral-200">
+    <motion.div
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      className="min-h-screen bg-neutral-50"
+    >
+      {/* Hero Section */}
+      <section className="pt-16 pb-12 bg-white border-b border-neutral-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl font-semibold tracking-tight text-neutral-900 mb-4">
+          <motion.div className="max-w-3xl" variants={heroVariants}>
+            <motion.h1
+              className="text-4xl font-semibold tracking-tight text-neutral-900 mb-4"
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               Consumables
-            </h1>
-            <p className="text-lg text-neutral-500">
+            </motion.h1>
+            <motion.p
+              className="text-lg text-neutral-500"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            >
               Premium thermal ribbons, labels, print heads, and cleaning supplies for your barcode printers.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Category Cards */}
-      <section className="py-12 bg-white border-b border-neutral-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {consumableCategories.map((category, index) => {
-              const count = consumables.filter(c => getCategoryByIcon(c.icon)?.id === category.id).length;
-              return (
-                <motion.button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(selectedCategory === category.id ? '' : category.id)}
-                  className={`group p-4 rounded-xl border text-left transition-all ${
-                    selectedCategory === category.id
-                      ? 'bg-neutral-900 border-neutral-900 text-white'
-                      : 'bg-white border-neutral-200 hover:border-neutral-300 hover:shadow-md'
-                  }`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${
-                    selectedCategory === category.id ? 'bg-white/20' : 'bg-neutral-100'
-                  }`}>
-                    <Icon
-                      icon={category.icon}
-                      width={20}
-                      className={selectedCategory === category.id ? 'text-white' : 'text-neutral-600'}
-                    />
-                  </div>
-                  <h3 className={`font-medium text-sm mb-1 ${
-                    selectedCategory === category.id ? 'text-white' : 'text-neutral-900'
-                  }`}>
-                    {category.name}
-                  </h3>
-                  <p className={`text-xs ${
-                    selectedCategory === category.id ? 'text-neutral-300' : 'text-neutral-500'
-                  }`}>
-                    {count} items
-                  </p>
-                </motion.button>
-              );
-            })}
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
       </section>
 
       {/* Products Section */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-            {/* Sidebar */}
-            <div className="hidden lg:block">
-              <div className="sticky top-24">
-                <div className="mb-6">
-                  <div className="relative">
-                    <Icon
-                      icon="lucide:search"
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-                      width={18}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Search consumables..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-neutral-200 focus:border-neutral-400 focus:outline-none text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-xl border border-neutral-200 p-4">
-                  <h3 className="font-semibold text-neutral-900 mb-3">Categories</h3>
-                  <div className="space-y-1">
-                    <button
-                      onClick={() => setSelectedCategory('')}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                        !selectedCategory
-                          ? 'bg-neutral-900 text-white'
-                          : 'text-neutral-600 hover:bg-neutral-50'
-                      }`}
-                    >
-                      All Items
-                    </button>
-                    {consumableCategories.map((category) => {
-                      const count = consumables.filter(c => getCategoryByIcon(c.icon)?.id === category.id).length;
-                      return (
-                        <button
-                          key={category.id}
-                          onClick={() => setSelectedCategory(category.id)}
-                          className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between ${
-                            selectedCategory === category.id
-                              ? 'bg-neutral-900 text-white'
-                              : 'text-neutral-600 hover:bg-neutral-50'
-                          }`}
-                        >
-                          <span className="flex items-center gap-2">
-                            <Icon icon={category.icon} width={16} />
-                            {category.name}
-                          </span>
-                          <span className="text-xs">{count}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
+          {/* Search & Count */}
+          <motion.div
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <span className="text-sm text-neutral-500">
+              Showing {filteredConsumables.length} item{filteredConsumables.length !== 1 && 's'}
+            </span>
+            <div className="relative w-full sm:w-72">
+              <Icon
+                icon="lucide:search"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+                width={18}
+              />
+              <input
+                type="text"
+                placeholder="Search consumables..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-neutral-200 focus:border-neutral-400 focus:outline-none text-sm"
+              />
             </div>
+          </motion.div>
 
-            {/* Mobile Search */}
-            <div className="lg:hidden mb-6">
-              <div className="relative">
-                <Icon
-                  icon="lucide:search"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-                  width={18}
-                />
-                <input
-                  type="text"
-                  placeholder="Search consumables..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-neutral-200 focus:border-neutral-400 focus:outline-none text-sm"
-                />
-              </div>
+          {/* Grid */}
+          {filteredConsumables.length === 0 ? (
+            <div className="text-center py-20">
+              <Icon icon="lucide:package-x" className="mx-auto text-neutral-300 mb-4" width={48} />
+              <h3 className="text-lg font-medium text-neutral-900 mb-2">No items found</h3>
+              <p className="text-neutral-500">
+                Try adjusting your search to find what you're looking for.
+              </p>
             </div>
-
-            {/* Products Grid */}
-            <div className="lg:col-span-3">
-              <div className="mb-4 flex items-center justify-between">
-                <span className="text-sm text-neutral-500">
-                  Showing {filteredConsumables.length} item{filteredConsumables.length !== 1 && 's'}
-                </span>
-                {selectedCategory && (
-                  <button
-                    onClick={() => setSelectedCategory('')}
-                    className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+          ) : (
+            <motion.div
+              key={searchQuery}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+              initial="initial"
+              animate="animate"
+              variants={{
+                initial: {},
+                animate: {
+                  transition: {
+                    staggerChildren: 0.08,
+                  },
+                },
+              }}
+            >
+              {filteredConsumables.map((item) => {
+                const features = parseFeatures(item.features);
+                return (
+                  <motion.div
+                    key={item.id}
+                    variants={cardVariants}
+                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                    className="group bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-lg hover:border-neutral-300 transition-all"
                   >
-                    <Icon icon="lucide:x" width={14} />
-                    Clear filter
-                  </button>
-                )}
-              </div>
+                    {/* Product Image */}
+                    <div className="aspect-[4/3] bg-gradient-to-br from-neutral-100 to-neutral-50 relative overflow-hidden">
+                      {item.imageUrl ? (
+                        <OptimizedImage
+                          src={getImageUrl(item.imageUrl)}
+                          alt={item.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          fallback={
+                            <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
+                              <Icon icon={item.icon || 'lucide:package'} className="text-neutral-400 group-hover:text-neutral-500 transition-colors" width={48} />
+                            </div>
+                          }
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
+                          <Icon icon={item.icon || 'lucide:package'} className="text-neutral-400 group-hover:text-neutral-500 transition-colors" width={48} />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
 
-              {filteredConsumables.length === 0 ? (
-                <div className="text-center py-20">
-                  <Icon icon="lucide:package-x" className="mx-auto text-neutral-300 mb-4" width={48} />
-                  <h3 className="text-lg font-medium text-neutral-900 mb-2">No items found</h3>
-                  <p className="text-neutral-500">
-                    Try adjusting your search or filter to find what you're looking for.
-                  </p>
-                </div>
-              ) : (
-                <div
-                  ref={productsGridRef}
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-                >
-                  {filteredConsumables.map((item, index) => {
-                    const category = getCategoryByIcon(item.icon);
-                    const features = parseFeatures(item.features);
-                    return (
-                      <div
-                        key={item.id}
-                        ref={(el) => {
-                          if (el) productCardsRef.current[index] = el;
-                        }}
-                        className="group bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-lg hover:border-neutral-300 transition-all"
+                    {/* Content */}
+                    <div className="p-4">
+                      <h3 className="font-semibold text-neutral-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                        {item.name}
+                      </h3>
+                      <p className="text-sm text-neutral-500 mb-4 line-clamp-2">{item.description}</p>
+
+                      {/* Features */}
+                      {features.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {features.slice(0, 3).map((feature, idx) => (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-neutral-100 text-neutral-600"
+                            >
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* CTA */}
+                      <Link
+                        to="/contact"
+                        className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-700 border border-neutral-200 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all"
                       >
-                        {/* Product Image */}
-                        <div className="aspect-[4/3] bg-gradient-to-br from-neutral-100 to-neutral-50 relative overflow-hidden">
-                          <img
-                            src={getImageUrl(item.imageUrl)}
-                            alt={item.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </div>
-
-                        {/* Content */}
-                        <div className="p-4">
-                          <div className="text-xs text-indigo-600 font-medium mb-1">
-                            {category?.name || 'Consumable'}
-                          </div>
-                          <h3 className="font-semibold text-neutral-900 mb-2 group-hover:text-indigo-600 transition-colors">
-                            {item.name}
-                          </h3>
-                          <p className="text-sm text-neutral-500 mb-4 line-clamp-2">{item.description}</p>
-
-                          {/* Features */}
-                          <div className="flex flex-wrap gap-1.5 mb-4">
-                            {features.slice(0, 3).map((feature, idx) => (
-                              <span
-                                key={idx}
-                                className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-neutral-100 text-neutral-600"
-                              >
-                                {feature}
-                              </span>
-                            ))}
-                          </div>
-
-                          {/* CTA */}
-                          <Link
-                            to="/contact"
-                            className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-700 border border-neutral-200 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all"
-                          >
-                            Get Quote
-                            <Icon icon="lucide:arrow-right" className="ml-2" width={14} />
-                          </Link>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
+                        Get Quote
+                        <Icon icon="lucide:arrow-right" className="ml-2" width={14} />
+                      </Link>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -398,6 +253,6 @@ export default function Consumables() {
           </div>
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 }

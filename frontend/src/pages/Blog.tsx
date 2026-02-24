@@ -1,29 +1,14 @@
-import { useEffect, useState } from 'react';
 import { publicApi } from '../services/api';
 import BlogCard from '../components/BlogCard';
 import LoadingSpinner from '../components/LoadingSpinner';
-import type { BlogPostList } from '../types';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Blog() {
-  const [posts, setPosts] = useState<BlogPostList[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const data = await publicApi.getBlogPosts();
-        setPosts(data);
-      } catch (err) {
-        console.error('Failed to fetch blog posts:', err);
-        setError('Failed to load blog posts');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPosts();
-  }, []);
+  const { data: posts = [], isLoading: loading, isError: error } = useQuery({
+    queryKey: ['blogPosts'],
+    queryFn: () => publicApi.getBlogPosts(),
+  });
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -49,14 +34,14 @@ export default function Blog() {
               <LoadingSpinner size="lg" />
             </div>
           ) : error ? (
-            <div className="text-center py-20 text-red-500">{error}</div>
+            <div className="text-center py-20 text-red-500">Failed to load blog posts</div>
           ) : posts.length === 0 ? (
             <div className="text-center py-20">
               <h3 className="text-lg font-medium text-neutral-900 mb-2">No blog posts yet</h3>
               <p className="text-neutral-500">Check back soon for updates and industry insights.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {posts.map((post, index) => (
                 <motion.div
                   key={post.id}
