@@ -17,7 +17,6 @@ const Contact = lazy(() => import('./pages/Contact'));
 const Clients = lazy(() => import('./pages/Clients'));
 const Consumables = lazy(() => import('./pages/Consumables'));
 const Industries = lazy(() => import('./pages/Industries'));
-const GetQuote = lazy(() => import('./pages/GetQuote'));
 
 // Lazy-loaded admin pages
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
@@ -69,7 +68,7 @@ function App() {
                 <Route path="clients" element={<Clients />} />
                 <Route path="consumables" element={<Consumables />} />
                 <Route path="industries" element={<Industries />} />
-                <Route path="get-quote" element={<GetQuote />} />
+
               </Route>
 
               {/* Admin Routes */}

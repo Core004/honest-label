@@ -14,7 +14,6 @@ const defaultNavLinks = [
   { href: '/clients', label: 'Clients' },
   { href: '/about', label: 'About' },
   { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
 ];
 
 export default function Navbar() {
@@ -28,12 +27,11 @@ export default function Navbar() {
 
   // Derive nav links from page settings (or use defaults)
   let navLinks = defaultNavLinks;
-  let showGetQuote = true;
 
   if (pages && pages.length > 0) {
     const publishedPages = pages.filter((p: PageSetting) => p.isPublished && p.showInNavbar);
     const dynamicLinks = publishedPages
-      .filter((p: PageSetting) => p.pageSlug !== 'get-quote')
+      .filter((p: PageSetting) => p.pageSlug !== 'get-quote' && p.pageSlug !== 'contact')
       .sort((a: PageSetting, b: PageSetting) => a.displayOrder - b.displayOrder)
       .map((p: PageSetting) => ({
         href: `/${p.pageSlug}`,
@@ -43,9 +41,6 @@ export default function Navbar() {
     if (dynamicLinks.length > 0) {
       navLinks = [{ href: '/', label: 'Home' }, ...dynamicLinks];
     }
-
-    const getQuotePage = pages.find((p: PageSetting) => p.pageSlug === 'get-quote');
-    showGetQuote = !getQuotePage || (getQuotePage.isPublished && getQuotePage.showInNavbar);
   }
 
   return (
@@ -73,14 +68,12 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            {showGetQuote && (
-              <Link
-                to="/get-quote"
-                className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 transition-all shadow-sm text-white bg-neutral-900 hover:bg-neutral-800"
-              >
-                Get a Quote
-              </Link>
-            )}
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 transition-all shadow-sm text-white bg-neutral-900 hover:bg-neutral-800"
+            >
+              Contact
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -112,15 +105,13 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              {showGetQuote && (
-                <Link
-                  to="/get-quote"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-neutral-900 hover:bg-neutral-800"
-                >
-                  Get a Quote
-                </Link>
-              )}
+              <Link
+                to="/contact"
+                onClick={() => setIsMenuOpen(false)}
+                className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-neutral-900 hover:bg-neutral-800"
+              >
+                Contact
+              </Link>
             </div>
           </div>
         )}
